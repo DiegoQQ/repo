@@ -76,6 +76,7 @@
                           <td>
                             <button class="btn btn-success btn-sm edit btn-flat" data-id="<?php echo $row['empid']; ?>"><i class="fa fa-edit"></i> Editar</button>
                             <button class="btn btn-danger btn-sm delete btn-flat" data-id="<?php echo $row['empid']; ?>"><i class="fa fa-trash"></i> Eliminar</button>
+                            <button data-toggle="modal" data-target="#generateQR" class="btn btn-warning btn-sm qrGenerate btn-flat" data-id="<?php echo $row['employee_id']; ?>"><i class="fa fa-qrcode"></i> Generar QR</button>
                           </td>
                         </tr>
                       <?php
@@ -87,6 +88,27 @@
           </div>
         </div>
       </div>
+
+<!-- Modal -->
+<div class="modal fade" id="generateQR" tabindex="-1" role="dialog" aria-labelledby="generateQRTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="exampleModalLongTitle">Generar QR</h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body ">
+        <div id="qrGen"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <a href="..." id="descarga" class="btn btn-primary btn-sm btn-flat" download><i class="fa fa-download"></i> Descargar</a>
+      </div>
+    </div>
+  </div>
+</div>
     </section>   
   </div>
     
@@ -94,8 +116,11 @@
   <?php include 'includes/employee_modal.php'; ?>
 </div>
 <?php include 'includes/scripts.php'; ?>
+<script defer src="../bower_components/qrGenerate/qrcode.min.js"></script>
 <script>
 $(function(){
+  let qrGen = document.querySelector('#qrGen');
+
   $('.edit').click(function(e){
     e.preventDefault();
     $('#edit').modal('show');
@@ -115,6 +140,34 @@ $(function(){
     var id = $(this).data('id');
     getRow(id);
   });
+
+  $('.qrGenerate').click(function(e){
+    e.preventDefault();
+    let id = $(this).data('id');
+    
+    qrGen.innerHTML = "";
+    const QR = new QRCode(qrGen);
+
+    QR.makeCode(id);
+
+    setTimeout(()=>{
+      let dowl = qrGen.querySelector('img').getAttribute('src');
+      document.querySelector('#descarga').href = dowl;
+    }, 500);
+  });
+  // $('#descarga').click(e => {
+  //   let btn = e.target;
+  //   e.preventDefault();
+  //   let dowl = qrGen.querySelector('img').getAttribute('src');
+
+  //   btn.href = dowl;
+  //   btn.download = true;
+  //   btn.target = '_blank';
+  //   console.log('btn: ', btn);
+
+  //   // btn.click();
+
+  // });
 
 });
 
