@@ -20,11 +20,14 @@
       		<div class="form-group has-feedback">
         		<input type="text" class="form-control input-lg" id="employee" name="employee" required>
         		<span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            <div class="text-center scanner">
+              <video id="preview" width="300px" height="300px"></video>
+            </div>
       		</div>
       		<div class="row">
-    			<div class="col-xs-4">
-          			<button type="submit" class="btn btn-primary btn-block btn-flat" name="signin"><i class="fa fa-sign-in"></i> Login</button>
-        		</div>
+    			  <div class="col-6">
+          			<button type="submit" class="btn btn-primary btn-block btn-flat" name="signin" id="btnSub"><i class="fa fa-sign-in"></i> Login</button>
+              </div>
       		</div>
     	</form>
   	</div>
@@ -51,6 +54,7 @@ $(function() {
   $('#attendance').submit(function(e){
     e.preventDefault();
     var attendance = $(this).serialize();
+    console.log('attendance: ', attendance);
     $.ajax({
       type: 'POST',
       url: 'attendance.php',
@@ -73,6 +77,28 @@ $(function() {
   });
     
 });
+
+  //scanner qr
+
+  let vid = document.getElementById('preview');
+  let employeeID = document.getElementById('employee');
+  let btnSubmit = document.getElementById('btnSub');
+  vid.removeAttribute("hidden");
+  let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+  scanner.addListener('scan', function (content) {
+    console.log(content);
+    employeeID.value = content;
+    btnSubmit.click();
+  });
+  Instascan.Camera.getCameras().then(function (cameras) {
+    if (cameras.length > 0) {
+      scanner.start(cameras[0]);
+    } else {
+      console.error('No se encontró ninguna cámara en el dispositivo.');
+    }
+  }).catch(function (e) {
+    console.error(e);
+  });
 </script>
 </body>
 </html>

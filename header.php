@@ -35,4 +35,6 @@
         font-weight: bold;
       }
   	</style>
+	
+	<script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
 </head>

@@ -33,7 +33,7 @@
 					$srow = $squery->fetch_assoc();
 					$logstatus = ($lognow > $srow['time_in']) ? 0 : 1;
 					//
-					$sql = "INSERT INTO attendance (employee_id, date, time_in, status) VALUES ('$id', '$date_now', NOW(), '$logstatus')";
+					$sql = "INSERT INTO attendance (employee_id, date, time_in, status, time_out,	num_hr) VALUES ('$id', '$date_now', NOW(), '$logstatus', '00:00:00', '0')";
 					if($conn->query($sql)){
 						$output['message'] = 'Llegada: '.$row['firstname'].' '.$row['lastname'];
 					}
@@ -48,13 +48,13 @@
 				$query = $conn->query($sql);
 				if($query->num_rows < 1){
 					$output['error'] = true;
-					$output['message'] = 'No se puede registrar tu salida, sin previamente registrar tu entrada.';
+					$output['message'] = 'No se puede registrar tu salida, sin previamente registrar	 tu entrada.';
 				}
 				else{
 					$row = $query->fetch_assoc();
 					if($row['time_out'] != '00:00:00'){
 						$output['error'] = true;
-						$output['message'] = 'Has registrado tu salida satisfactoriamente por el día de hoy';
+						$output['message'] = ' Has registrado tu salida satisfactoriamente por el día de hoy';
 					}
 					else{
 						
